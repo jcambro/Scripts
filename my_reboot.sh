@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 #A script to reboot Linux after all users have logged out of their accounts.
-#IDEA: run with nohup &
 
 #### Helper Functions
 function command_line_args {
@@ -28,7 +27,7 @@ function student_or_staff {
 	#Checks for important users
 	if (( $USERCHECK > 999999 ))
 	then
-		echo "There is an importnat user on the system"
+		echo "There is an important user on the system"
 	else
 		echo "There is a student on the system"
 	fi
