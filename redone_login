@@ -15,7 +15,7 @@
 #Check for AFS storage capacity
 USEDPERCENT=$(fs listquota -path /afs/umich.edu/user/${USER:0:1}/${USER:1:1}/$USER | tail -n 1 | awk '{print $4}' | sed 's/%//')
 
-if (( $USEDPERCENT >= 0 ))
+if (( $USEDPERCENT >= 9999999990 ))
 then
 	zenity --warning --text "You are currently using $USEDPERCENT% of your allocated AFS storage.\n
 	Please consider freeing up space."
