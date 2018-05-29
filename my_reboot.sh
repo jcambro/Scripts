@@ -23,9 +23,10 @@ function reset_giveup {
 }
 
 function student_or_staff {
+	USERNUMBER=$( id -u $USERCHECK)
 	
 	#Checks for important users
-	if (( $USERCHECK > 999999 ))
+	if (( $USERNUMBER > 999999 ))
 	then
 		echo "There is an important user on the system"
 	else
@@ -36,14 +37,12 @@ function student_or_staff {
 
 
 #See if any important users are loged on. Sort works from lowest to highest. Looking for high ID numbers.
-USERCHECK=$(id -u | sort -n | tail -n 1)
-NUMBERUSERS=$(id -u | sort -n | wc -l) 
+#USERCHECK=$(id -u | sort -n | tail -n 1)
+USERCHECK=$(who | awk '{print $1}')
 
 #Set the giveup time to be 7 days later 
 GIVEUP=1
 reset_giveup
-
-echo "The number of users logged on: " $NUMBERUSERS
 
 #If the variable is null, no users are logged on
 if [[ "$USERCHECK" == "" ]]
@@ -63,7 +62,7 @@ PREV_USER=$USERCHECK
 #Updates every hour to see if there is a user on. 
 while [ -n "$(who)" ]
 do
-	USERCHECK=$(id -u | sort -n | tail -n 1)
+	USERCHECK=$(who | awk '{print $1}')
 
 	if [[ "$PREV_USER" -ne "$USERCHECK" ]]
 	then
