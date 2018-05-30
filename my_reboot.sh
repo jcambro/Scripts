@@ -4,7 +4,7 @@
 
 #### Helper Function
 function student_or_staff {
-	USERNUMBER=$( id -u $USERCHECK)
+	USERNUMBER=$(id -u $USERCHECK)
 	
 	#Checks for important users
 	if (( $USERNUMBER > 999999 ))
