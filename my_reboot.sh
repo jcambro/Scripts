@@ -2,26 +2,7 @@
 #
 #A script to reboot Linux after all users have logged out of their accounts.
 
-#### Helper Functions
-function command_line_args {
-	while [ "$1" != "" ]
-	do
-		case $1 in
-			#TODO ADD OPTIONS
-		esac
-		shift
-	done
-}
-
-function reset_giveup {
-	#Days go from 1 to 366. Goal is to jump 7 days forward.
-	CURRENT_DATE=$(date +%j)
-	CURRENT_DATE+=6
-	GIVEUP=$(($CURRENT_DATE % 365))
-	#Keeps the value from being 0
-	GIVEUP+=1
-}
-
+#### Helper Function
 function student_or_staff {
 	USERNUMBER=$( id -u $USERCHECK)
 	
@@ -40,17 +21,9 @@ function student_or_staff {
 #USERCHECK=$(id -u | sort -n | tail -n 1)
 USERCHECK=$(who | awk '{print $1}')
 
-#Set the giveup time to be 7 days later 
-GIVEUP=1
-reset_giveup
-
 #If the variable is null, no users are logged on
 if [[ "$USERCHECK" == "" ]]
 then
-	command_line_args
-
-	#Handle the arguments
-
 	reboot now
 	exit
 else
@@ -64,27 +37,20 @@ while [ -n "$(who)" ]
 do
 	USERCHECK=$(who | awk '{print $1}')
 
-
-	#Coming up with a way to check for amout of time logged in. 
-	# var=$(who | awk '{print $3,$4}' )
-
-	#This gives the minutes logged on.
-	#time_on=$( $(($(($(date +%s) - $(date -d "$var" +%s)))/60)) )
-
-	# there are 10080 minutes in 7 days. 	
-
-
-
 	if [[ "$PREV_USER" -ne "$USERCHECK" ]]
 	then
-		#The same user has to be on for 7 days
-		reset_giveup
+		#Check if the person who logged on is important.
 		student_or_staff
 		PREV_USER=$USERCHECK
 	fi
+
+	#Find the user with the least time on
+
+	LOGIN_TIME=$(who | awk '{print $3,$4}')
+	TIME_ON=$($(($(($(date +%s) - $(date -d "$LOGIN_TIME" +%s)))/60)))
 	
-	
-	if (( "$(date +%j)" != "$GIVEUP" ))
+	#There are 10080 minutes in 7 days.
+	if (( $TIME_ON < 10080 ))
 	then
 		#CHANGE TO 3600 after testing, which is 1 hour.
 		sleep 10
@@ -93,9 +59,5 @@ do
 		exit
 	fi
 done
-
-command_line_args
-
-#Handle the arguments
 
 reboot now
