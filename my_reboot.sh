@@ -64,6 +64,17 @@ while [ -n "$(who)" ]
 do
 	USERCHECK=$(who | awk '{print $1}')
 
+
+	#Coming up with a way to check for amout of time logged in. 
+	# var=$(who | awk '{print $3,$4}' )
+
+	#This gives the minutes logged on.
+	#time_on=$( $(($(($(date +%s) - $(date -d "$var" +%s)))/60)) )
+
+	# there are 10080 minutes in 7 days. 	
+
+
+
 	if [[ "$PREV_USER" -ne "$USERCHECK" ]]
 	then
 		#The same user has to be on for 7 days
@@ -78,7 +89,7 @@ do
 		#CHANGE TO 3600 after testing, which is 1 hour.
 		sleep 10
 	else
-		#TODO send an email to alert an admin to kick off the user.
+		reboot now
 		exit
 	fi
 done
