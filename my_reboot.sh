@@ -26,7 +26,7 @@ USERCHECK=$(who | head -n 1 | awk '{print $1}')
 #If the variable is null, no users are logged on
 if [[ "$USERCHECK" == "" ]]
 then
-	reboot now
+	reboot 
 	exit
 else
 	student_or_staff
@@ -59,10 +59,12 @@ do
 		sleep 10
 	else
 		#boot the users. 
+		zenity --warning --text "The system will forcibly remove all users and reboot in 10 minutes,\nPlease save all work."
+		sleep 600
 
-		reboot now
+		reboot 
 		exit
 	fi
 done
 
-reboot now
+reboot
