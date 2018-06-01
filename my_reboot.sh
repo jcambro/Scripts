@@ -47,7 +47,7 @@ do
 	fi
 
 	#Find the user with the least time on. The sort command was tweaked for the date format yyyy-mm-dd hh:mm
-	LOGIN_TIME=$(who | sort -k 3.3,3.4 -k 3.7,3.6 -k 3.10,3.9 -k 4.2,4.1 -k 4.5,4.4 | tail -n 1 |awk '{print $3,$4}')
+	LOGIN_TIME=$(who | sort -k 3 -k 4 | tail -n 1 |awk '{print $3,$4}')
 	
 	#Saves the amount of time in minutes the shortest user has been on for.
 	TIME_ON=$((($(( $(date +%s) - $(date -d "$LOGIN_TIME" +%s)))/60)))
