@@ -17,6 +17,14 @@ function student_or_staff {
 	fi
 }
 
+function custom_reboot {
+	#extra stuff for the difficult machines
+	
+	#COM_NAME=$(cat /etc/hostname)
+	#remctl $COM_NAME caenadmin reboot Windows
+
+	reboot
+}
 
 
 
@@ -26,7 +34,7 @@ USERCHECK=$(who | head -n 1 | awk '{print $1}')
 #If the variable is null, no users are logged on
 if [[ "$USERCHECK" == "" ]]
 then
-	reboot 
+	custom_reboot 
 	exit
 else
 	student_or_staff
@@ -61,10 +69,11 @@ do
 		#boot the users. 
 		zenity --warning --text "The system will forcibly remove all users and reboot in 10 minutes,\nPlease save all work."
 		sleep 600
+		reboot
 
-		reboot 
+		custom_reboot 
 		exit
 	fi
 done
 
-reboot
+custom_reboot
